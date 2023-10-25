@@ -1,5 +1,5 @@
 from src.jeuDomino import *
+from src.Statistic import Statistic
 
-jeu = JeuDomino(7)
-jeu.nouveauJeu()
-jeu.boucleJeu()
+stat = Statistic(JeuDomino(7))
+stat.esperance_Y()

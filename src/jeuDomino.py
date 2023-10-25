@@ -12,13 +12,13 @@ class JeuDomino:
 
         self.max = max
         self.pioche = deque()
-        self.selected = None
-        self.gauche = 0
-        self.droite = 0
+        self.domino_selected = None
+        self.extremite_gauche = 0
+        self.extremite_droite = 0
 
 
-    def nouveauJeu(self):
-        """Nettoie les informations des anciens jeu (si il y'en a un) et prépare un nouveau jeu
+    def nouveauJeu(self, affichage = True) -> int:
+        """Nettoie les informations des anciens jeu (si il y'en a un) et lance un nouveau jeu
         """
 
         # Nettoyage du jeu de domino
@@ -38,40 +38,81 @@ class JeuDomino:
         random.shuffle(self.pioche) # Mélange des cartes
 
         # Choix au hasard du premier domino
-        self.selected = self.pioche.popleft()
-        self.gauche = self.selected.gauche
-        self.droite = self.selected.droite
+        self.domino_selected = self.pioche.popleft()
+        self.extremite_gauche = self.domino_selected.gauche
+        self.extremite_droite = self.domino_selected.droite
+
+        x, y = self.boucleJeu(affichage)
+        return x, y
+
         
-    def boucleJeu(self):
-            game = True
-            taille = len(self.pioche)
-            tour = 0
-            while (game):
-                self.selected = self.pioche.popleft()
+    def boucleJeu(self, affichage : bool = True) -> int:
+        game = True
+        taille_pioche = 0
+        tour = 0
 
-                # Affichage test
-                print(f"\n|{self.gauche}|..|?|..|{self.droite}|")
-                print(f"\n\t\t|{self.selected.gauche}|{self.selected.droite}| {tour}/{taille}")
-                print("\n----------------------------------------------------------------------")
+        while (game):
+            taille_pioche = len(self.pioche) # On récupère la taille de la pioche
+            if (taille_pioche > 0):
+                self.domino_selected = self.pioche.popleft() # On enleve un domino de la pioche
+            else :
+                game = False
 
-                if (tour < taille):
-                    # Test si on peut le mettre dans les extrémités
-                    if (self.selected.gauche == self.gauche):
-                        self.gauche = self.selected.droite
-                        tour = 0 
-                    elif (self.selected.gauche == self.droite):
-                        self.droite = self.selected.droite
-                        tour = 0
-                    elif (self.selected.droite == self.gauche):
-                        self.gauche = self.selected.gauche
-                        tour = 0
-                    elif (self.selected.droite == self.droite):
-                        self.droite = self.selected.gauche
-                        tour = 0
+            if (tour < taille_pioche):
 
-                    else:
-                        self.pioche.append(self.selected)
-                        tour+=1
-                else :
-                    game = False
-                     
+                if (affichage):
+                    ### Affichage du jeu
+                    print(f"\nTaille pioche : {taille_pioche}\n|{self.extremite_gauche}|..|?|..|{self.extremite_droite}|")
+                    print(f"\n\t\t|{self.domino_selected.gauche}|{self.domino_selected.droite}| --- Domino de la pioche : {tour+1}/{taille_pioche}")
+                    print("\n----------------------------------------------------------------------")
+                
+                #### Test si on peut le mettre dans les extrémités
+                if (self.domino_selected.gauche == self.extremite_gauche):
+                    self.extremite_gauche = self.domino_selected.droite
+                    tour = 0
+
+                elif (self.domino_selected.gauche == self.extremite_droite):
+                    self.extremite_droite = self.domino_selected.droite
+                    tour = 0
+
+                elif (self.domino_selected.droite == self.extremite_gauche):
+                    self.extremite_gauche = self.domino_selected.gauche
+                    tour = 0
+
+                elif (self.domino_selected.droite == self.extremite_droite):
+                    self.extremite_droite = self.domino_selected.gauche
+                    tour = 0
+
+                else:
+                    self.pioche.append(self.domino_selected) # Le domino ne peut pas être placé, on le remet dans la pioche
+                    tour+=1
+            else :
+                game = False
+                self.pioche.append(self.domino_selected)
+
+
+        ### Affichage de fin de partie  
+        if (affichage) : 
+            print("\n\t\t\t-------------\n\t\t\tFIN DE PARTIE\n\t\t\t-------------\n")
+
+        ### Calcul du nombre de domino placés
+        taille_pioche = len(self.pioche)
+        nb_domino_place = 28-taille_pioche # = X
+
+        ### Calcule des points restants
+        somme_points_restant = 0 # = Y
+        
+        while True:
+            try :
+                domino_restant_selected = self.pioche.pop()
+                somme_points_restant += domino_restant_selected.gauche
+                somme_points_restant += domino_restant_selected.droite
+            except IndexError :
+                break
+
+        ### Affichage statistiques fin de partie 
+        if (affichage) :
+            print(f"\nNombre de domino placés : {nb_domino_place}\nSomme des points restants : {somme_points_restant}\n")
+
+        ### Valeurs retournées
+        return nb_domino_place, somme_points_restant
