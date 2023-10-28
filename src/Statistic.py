@@ -52,8 +52,29 @@ class Statistic :
         esperance = sum(tab_val)/nb_lancer
         return esperance
     
-    def variance_x(self):
-        self.ecart_type()
+    @staticmethod
+    def variance(tab_val : list[int], moyenne : float, nb_lancer : int) -> float :
+        """Calcule la variance d'une variable aléaoire
+
+        Args:
+            tab_val (list[int]): Valeurs prises par la variable aléatoire
+            moyenne (float): Espérance de la variable aléatoire
+            nb_lancer (int): Nombre de lancer de partie
+
+        Returns:
+            float: Variance de la variable aléatoire
+        """
+        variance = 0
+        for val in tab_val :
+            #print("Val :", val, "Moy : ", moyenne)
+            variance += (val-moyenne)**2
+            #print("VAL - Moy **2 : ", (val-moyenne)**2)
+            #print("Val - Moy :", (val-moyenne))
+            #print()
+        #print("Somme ecart-type : ", ecart_type)
+        variance /= nb_lancer
+        #print("ecart-type : ", ecart_type)
+        return variance
 
     @staticmethod
     def ecart_type(tab_val : list[int], moyenne : float, nb_lancer : int) -> float :
@@ -67,15 +88,5 @@ class Statistic :
         Returns:
             float: Ecart-type de la variable aléatoire
         """
-        ecart_type = 0
-        for val in tab_val :
-            #print("Val :", val, "Moy : ", moyenne)
-            ecart_type += (val-moyenne)**2
-            #print("VAL - Moy **2 : ", (val-moyenne)**2)
-            #print("Val - Moy :", (val-moyenne))
-            #print()
-        #print("Somme ecart-type : ", ecart_type)
-        ecart_type /= nb_lancer
-        ecart_type = sqrt(ecart_type)
-        #print("ecart-type : ", ecart_type)
-        return ecart_type
+        return sqrt(Statistic.variance(tab_val, moyenne, nb_lancer))
+        
