@@ -89,4 +89,14 @@ class Statistic :
             float: Ecart-type de la variable aléatoire
         """
         return sqrt(Statistic.variance(tab_val, moyenne, nb_lancer))
-        
+    
+    def proba_succes(self) -> float: 
+        """Calcule la probabilité de succés d'une partie de domino
+
+        Returns:
+            float: Probabilité de succès
+        """
+        succes = 0
+        for nb_point_restant in self.tab_val_y :
+            if nb_point_restant == 0 : succes += 1
+        return succes / self.NOMBRE_DE_LANCER
