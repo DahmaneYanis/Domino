@@ -40,7 +40,7 @@ class Statistic :
 
     @staticmethod
     def esperance(tab_val : list[int], nb_lancer : int) -> float :
-        """Calcul l'esperance d'une variable aléatoire
+        """Calcule l'esperance d'une variable aléatoire
 
         Args:
             tab_val (list[int]): Valeurs prises par la variable aléatoire
@@ -78,7 +78,7 @@ class Statistic :
 
     @staticmethod
     def ecart_type(tab_val : list[int], moyenne : float, nb_lancer : int) -> float :
-        """Calcul l'écart-type d'une variable aléatoire
+        """Calcule l'écart-type d'une variable aléatoire
 
         Args:
             tab_val (list[int]): Valeurs prises par la variable aléatoire
@@ -100,3 +100,13 @@ class Statistic :
         for nb_point_restant in self.tab_val_y :
             if nb_point_restant == 0 : succes += 1
         return succes / self.NOMBRE_DE_LANCER
+    
+    def median_point_restant(self) -> int:
+        """Calcule la médiane des points restants
+
+        Returns:
+            int : Médiane
+        """
+        temp_tab_val_y = self.tab_val_y
+        temp_tab_val_y.sort()
+        return temp_tab_val_y[(self.NOMBRE_DE_LANCER//2)-1]
