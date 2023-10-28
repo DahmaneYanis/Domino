@@ -16,9 +16,14 @@ class JeuDomino:
         self.extremite_gauche = 0
         self.extremite_droite = 0
 
-
     def nouveauJeu(self, affichage = True) -> int:
-        """Nettoie les informations des anciens jeu (si il y'en a un) et lance un nouveau jeu
+        """Prépare et lance une nouvelle partie, nettoie les données de l'ancienne partie si il y en une
+
+        Args:
+            affichage (bool, optional): Variable permettant de savoir si l'on veut réaliser l'affichage de la fonction ou si l'on veut simplement récupérer les données de la partie. Defaults to True.
+
+        Returns:
+            int: variable x et y
         """
 
         # Nettoyage du jeu de domino
@@ -44,9 +49,16 @@ class JeuDomino:
 
         x, y = self.boucleJeu(affichage)
         return x, y
-
         
     def boucleJeu(self, affichage : bool = True) -> int:
+        """Boucle principale du jeu qui tourne jusqu'à ce que la partie soit finie
+
+        Args:
+            affichage (bool, optional): Variable permettant de savoir si il faut réaliser l'affichage ou si c'est pour de la récupération de données. Defaults to True.
+
+        Returns:
+            int: Les données du jeu (nombre de domino placé et somme de points restant dans la pioche)
+        """
         game = True
         taille_pioche = 0
         tour = 0

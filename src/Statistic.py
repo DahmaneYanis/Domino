@@ -1,63 +1,81 @@
 from .jeuDomino import JeuDomino
+from math import sqrt
 class Statistic :
     NOMBRE_DE_LANCER = 10000
 
     def __init__(self, jeuDomino : JeuDomino):
         self.jeuDomino = jeuDomino
-        self.tabX = [] # Tableau des nb_domino_place
-        self.tabY = [] # Tableau des points restant
+        self.tab_val_x = [] # Tableau des nb_domino_place
+        self.tab_val_y = [] # Tableau des points restant
         self.lancer_jeu_domino(self.NOMBRE_DE_LANCER)
 
     def lancer_jeu_domino(self, nb_lancer : int):
-        """Lancer nb_lancer fois le jeu de domino et récupère les stats
+        """Lance le jeu de domino et récupère les stats
 
         Args:
             nb_lancer (int): nombre de fois que l'on veut lancer le jeu de domino 
         """
         for i in range(nb_lancer):
             x, y = self.jeuDomino.nouveauJeu(False)
-            self.tabX.append(x)
-            self.tabY.append(y)
+            self.tab_val_x.append(x)
+            self.tab_val_y.append(y)
     
-    def loi_de_probabilite_X(self):
-        """Détermine la loi de probabilité de X
+    @staticmethod
+    def loi_de_probabilite(tab_val : list[int], nb_lancer : int) -> list[float] :
+        """Calcule la loi de probabilite d'une variable aléatoire
+
+        Args:
+            tab_val (list[int]): Valeurs prises par la variable aléatoire
+            nb_lancer (int): Nombre de lancer
+
+        Returns:
+            list[float]: Loi de probabilite sous la forme loi[valeurEntiere] = probabilite que la valeur soit prise par la variable aléatoire
         """
-
-        tabX = [0 for i in range(max(self.tabX)+1)]
-        for nb_domino_place in self.tabX:
-            tabX[nb_domino_place] += 1
+        loi = [0 for i in range(max(tab_val)+1)]
+        for nb_domino_place in tab_val:
+            loi[nb_domino_place] += 1
         
-        tabX = [occurence/self.NOMBRE_DE_LANCER for occurence in tabX]
-        print(tabX)
-        print(len(tabX))
+        loi = [occurence/nb_lancer for occurence in loi]
+        return loi
 
-    def loi_de_probabilite_Y(self):
-        """Détermine la loi de probabilité de X
+    @staticmethod
+    def esperance(tab_val : list[int], nb_lancer : int) -> float :
+        """Calcul l'esperance d'une variable aléatoire
+
+        Args:
+            tab_val (list[int]): Valeurs prises par la variable aléatoire
+            nb_lancer (int): Nombre de lancer de partie
+
+        Returns:
+            float: Esperance de la variable aléatoire
         """
-
-        tabY = [0 for i in range(max(self.tabY)+1)]
-        for somme_point_pioche in self.tabX:
-            tabY[somme_point_pioche] += 1
-        
-        tabY = [occurence/self.NOMBRE_DE_LANCER for occurence in tabY]
-        print(tabY)
-        print(len(tabY))
-        print(max(self.tabY))
-
-    def esperance_X(self):
-        esperance = self.esperance(self.tabX)
-        print(esperance)
-    
-    def esperance_Y(self):
-        esperance = self.esperance(self.tabY)
-        print(esperance)
-
-    def esperance(self, tab):
-        esperance = sum(tab)/self.NOMBRE_DE_LANCER
+        esperance = sum(tab_val)/nb_lancer
         return esperance
     
-    def variance_X(self):
+    def variance_x(self):
         self.ecart_type()
 
-    def ecart_type(self):
-        return
+    @staticmethod
+    def ecart_type(tab_val : list[int], moyenne : float, nb_lancer : int) -> float :
+        """Calcul l'écart-type d'une variable aléatoire
+
+        Args:
+            tab_val (list[int]): Valeurs prises par la variable aléatoire
+            moyenne (float): Espérance de la variable aléatoire
+            nb_lancer (int): Nombre de lancer de partie
+
+        Returns:
+            float: Ecart-type de la variable aléatoire
+        """
+        ecart_type = 0
+        for val in tab_val :
+            #print("Val :", val, "Moy : ", moyenne)
+            ecart_type += (val-moyenne)**2
+            #print("VAL - Moy **2 : ", (val-moyenne)**2)
+            #print("Val - Moy :", (val-moyenne))
+            #print()
+        #print("Somme ecart-type : ", ecart_type)
+        ecart_type /= nb_lancer
+        ecart_type = sqrt(ecart_type)
+        #print("ecart-type : ", ecart_type)
+        return ecart_type
