@@ -9,10 +9,12 @@ class Viewer :
         Args:
             loi (list[int]): Loi de probabilite
         """
+        pas = (len(loi)//50)+1
         plt.figure()
 
+        plt.title("Loi de probabilité")
         plt.bar([i for i in range(len(loi))], loi)
-        plt.xticks([i for i in range(len(loi))])
+        plt.xticks([i for i in range(0, len(loi), pas)])
 
         plt.show()
     
@@ -22,10 +24,12 @@ class Viewer :
         Args:
             repartition (list[float]): Fonction de répartition à représenter
         """
+        pas = (len(repartition)//50)+1
         plt.figure()
 
+        plt.title("Fonction de répartition")
         plt.plot([i for i in range(len(repartition))], repartition)
-        plt.xticks([i for i in range(len(repartition))])
+        plt.xticks([i for i in range(0, len(repartition), pas)])
 
         plt.show()
 
@@ -36,10 +40,11 @@ class Viewer :
             tab_x (list): Coordonnées X des points
             tab_y (list): Coordonnées Y des points
         """
+        pas = ((max(tab_x)-min(tab_x))//50)+1
         plt.figure()
 
+        plt.title("Nuage de point")
         plt.scatter(tab_x, tab_y)
-   
-        plt.xticks([i for i in range(min(tab_x), max(tab_x)+1)])
+        plt.xticks([i for i in range(min(tab_x), max(tab_x)+1, pas)])
 
         plt.show()

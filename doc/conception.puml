@@ -1,0 +1,50 @@
+@startuml Domino
+class Viewer {
+    + loi_de_probabilite(repartition : list[float])
+    + fonction_de_repartition(repartition : list[float])
+    + nuage_de_point(tab_x : list, tab_y : list)
+}
+
+class Domino {
+    + __init__(gauche : int, droite : int)
+    + gauche : int
+    + droite : int
+}
+
+JeuDomino *--> "+ domino_selected" Domino
+JeuDomino *--> "+ pioche : deque<Domino>" Domino
+class JeuDomino {
+    + max : int
+    + extremite_gauche : int
+    + extremite_droite : int 
+    + __init__(max : int)
+    + nouveauJeu(self, affichage = True) : int
+    + boucleJeu(affichage : bool = True) : int:
+}
+
+Statistic o--> "+ jeuDomino" JeuDomino
+Statistic o--> "+ viewer" Viewer
+class Statistic {
+    {static} + NOMBRE_DE_LANCER = 1000
+    ....
+    + tab_val_x : list[int]
+    + tab_val_y : list[int]
+    ----
+    {static} + loi_de_probabilite(tab_val : list[int], nb_lancer : int) : list[float] 
+    {static} + fonction_de_repartition(loi : list[float]) : list[float]
+    {static} + esperance(tab_val : list[int], nb_lancer : int) : float
+    {static} + variance(tab_val : list[int], moyenne : float, nb_lancer : int) : float 
+    {static} + covariance(esperance_z: float, esperance_x : float, esperance_y : float) : float
+    {static} + coefficient_de_correlation(cov_xy : float, ecart_x : int, ecart_y : int) : float
+    ....
+    + __init__(jeuDomino : JeuDomino, visualisateur : Viewer)
+    + lancer_jeu_domino(nb_lancer : int)
+    + proba_succes() : float 
+    + median_point_restant() : int
+    + get_X() : list[float]
+    + get_Y() : list[float]
+    + get_Z() : list[float]
+}
+
+
+@enduml

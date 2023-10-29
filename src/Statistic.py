@@ -1,3 +1,4 @@
+from scipy import constants
 from .jeuDomino import JeuDomino
 from math import sqrt
 from .viewer import Viewer 
